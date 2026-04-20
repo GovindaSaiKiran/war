@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Smart Stadium Experience — real-time crowd management, live match tracking, digital ticketing and transit coordination for IPL attendees at M. Chinnaswamy Stadium.">
+    <meta name="theme-color" content="#3b82f6">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com https://cdnjs.cloudflare.com 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://esm.run https://cdn.jsdelivr.net https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data: blob:; worker-src blob: 'self'; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://generativelanguage.googleapis.com https://apis.google.com; frame-src 'self' https://*.firebaseapp.com https://apis.google.com https://smart-stadium-oardwr3raa-uc.firebaseapp.com;">
+    <title>Smart Stadium Experience | M. Chinnaswamy Stadium</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"SportsEvent",
+      "name":"RCB vs CSK — IPL 2024",
+      "location":{"@type":"StadiumOrArena","name":"M. Chinnaswamy Stadium","address":"Bengaluru, Karnataka"}
+    }
+    </script>
+</head>
+<body>
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#content" class="skip-link" id="skip-nav">Skip to main content</a>
+
+    <!-- ARIA Live Region for screen reader announcements -->
+    <div id="aria-live-region" class="sr-only" aria-live="polite" role="status"></div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" role="alert" aria-atomic="true"></div>
+
+    <div id="app">
+        <!-- Header -->
+        <header class="app-header" role="banner">
+            <div class="logo">
+                <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                <div class="logo-text">
+                    <span>Smart Stadium</span>
+                    <small>Powered by Google Cloud</small>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" id="btn-notifications" aria-label="View notifications">
+                    <i class="fa-regular fa-bell" aria-hidden="true"></i><span class="badge pulse" aria-label="New notifications"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main id="content" role="main" aria-label="Stadium experience content">
+
+            <!-- === LIVE MATCH === -->
+            <section id="live-match" class="view active" role="tabpanel" aria-labelledby="nav-live">
+                <div class="view-header"><h1>Live Center</h1><span class="live-indicator" role="status" aria-label="Match is live"><i class="fa-solid fa-circle" aria-hidden="true"></i> LIVE</span></div>
+                <div class="glass-card match-card" aria-label="Current match scorecard">
+                    <div class="match-teams">
+                        <div class="team"><div class="team-logo rcb" role="img" aria-label="RCB logo">RCB</div><h2>Royal Challengers</h2><p class="score" id="team1-score">184/4</p><p class="overs" id="team1-overs">(18.2)</p></div>
+                        <div class="vs" aria-hidden="true">VS</div>
+                        <div class="team"><div class="team-logo csk" role="img" aria-label="CSK logo">CSK</div><h2>Super Kings</h2><p class="score" id="team2-score">Yet to bat</p><p class="overs" id="team2-overs"></p></div>
+                    </div>
+                    <div class="match-status"><p id="match-equation" role="status">RCB need 12 runs to reach 196</p><div class="crr-req"><span>CRR: <strong id="crr">10.05</strong></span><span>Proj: <strong>205</strong></span></div></div>
+                    <div class="win-prediction" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px;">
+                            <span><i class="fa-brands fa-google" style="color: #4285F4;"></i> Win Prediction</span>
+                            <span id="win-prob-text" style="font-weight: 600;">RCB 50% - CSK 50%</span>
+                        </div>
+                        <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; display: flex;">
+                            <div id="win-prob-rcb" style="height: 100%; width: 50%; background: var(--rcb); transition: width 0.5s ease;"></div>
+                            <div id="win-prob-csk" style="height: 100%; width: 50%; background: var(--csk); transition: width 0.5s ease;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card timeline-card"><h2>Recent Balls</h2><div class="recent-balls" id="recent-balls" role="list" aria-label="Recent ball outcomes"></div></div>
+                <div class="glass-card batter-bowler-card">
+                    <div class="batters"><h2>Batters</h2><div class="player-row active-player"><span>V Kohli *</span><span>82 (48)</span></div><div class="player-row"><span>G Maxwell</span><span>45 (22)</span></div></div>
+                    <div class="divider" role="separator"></div>
+                    <div class="bowlers"><h2>Bowler</h2><div class="player-row active-player"><span>M Pathirana *</span><span>2-32 (3.2)</span></div></div>
+                </div>
+                <!-- Crowd Density Summary -->
+                <div class="glass-card crowd-summary-card">
+                    <h2>Crowd Density</h2>
+                    <div class="crowd-bars" id="crowd-bars" aria-label="Live crowd density by zone"></div>
+                </div>
+                <!-- Queue Wait Times -->
+                <div class="glass-card queue-card">
+                    <h2><i class="fa-solid fa-clock" aria-hidden="true"></i> Estimated Wait Times</h2>
+                    <div class="queue-grid" id="queue-grid" aria-label="Current estimated wait times for facilities"></div>
+                </div>
+            </section>
+
+            <!-- === STADIUM MAP === -->
+            <section id="stadium-map" class="view" aria-labelledby="map-heading">
+                <h2 id="map-heading" class="visually-hidden">Stadium Map</h2>
+
+                <div class="card map-card" style="padding: 0; overflow: hidden; display: flex; justify-content: center; background: #0f172a; border-radius: 12px;">
+                    <img src="https://www.indiafantasy.com/wp-content/uploads/M-chinaswamy-map-717x768.png" alt="M Chinnaswamy Stadium Map" style="max-width: 100%; max-height: 500px; height: auto; object-fit: contain;">
+                </div>
+                <div class="glass-card info-card"><h2>Your Seat: Stand G, Block 3, Row M, Seat 45</h2><p>Enter via <strong>Gate 4</strong> — estimated walk time 3 min</p></div>
+                <div class="glass-card info-card"><h2>Nearby Facilities</h2><ul class="facility-list" id="facility-list" aria-label="Nearby stadium facilities"></ul></div>
+            </section>
+
+            <!-- === TICKETS === -->
+            <section id="tickets" class="view" role="tabpanel" aria-labelledby="nav-tickets">
+                <div class="view-header"><h1>Digital Pass</h1></div>
+                <div class="glass-card ticket-card" aria-label="Your digital match ticket">
+                    <div class="ticket-header"><div class="match-info"><h2>RCB vs CSK</h2><p>M Chinnaswamy Stadium</p><p>May 18, 2024 • 19:30 IST</p></div><img src="https://pbs.twimg.com/media/FrUoEVeakAIebQA.jpg" alt="IPL 2024 match ticket for RCB vs CSK" class="ticket-image" loading="lazy"></div>
+                    <div class="ticket-details"><div class="detail"><span>Gate</span><strong>4</strong></div><div class="detail"><span>Stand</span><strong>G</strong></div><div class="detail"><span>Seat</span><strong>M-45</strong></div></div>
+                    <div class="qr-code-container"><div class="qr-placeholder" role="img" aria-label="QR code for gate entry"><i class="fa-solid fa-qrcode" aria-hidden="true"></i><p>Scan at Gate 4</p></div><p class="ticket-note">Keep screen brightness high for scanning.</p></div>
+                </div>
+            </section>
+
+            <!-- === TRANSIT === -->
+            <section id="routes" class="view" role="tabpanel" aria-labelledby="nav-transit">
+                <div class="view-header"><h1>Transit Hub</h1></div>
+                <nav class="route-options" aria-label="Transit routes to stadium">
+                    <a href="https://www.google.com/maps/dir/M.+Chinnaswamy+Stadium,+Mahatma+Gandhi+Rd,+near+Cubbon+Road,+Shivaji+Nagar,+Bengaluru,+Karnataka+560001/Kempegowda+International+Airport+Bengaluru,+Karnataka+560300/@13.0910003,77.5632331,28494m/data=!3m1!1e3!4m13!4m12!1m5!1m1!1s0x3bae1664d3619b53:0xc13769784709aec!2m2!1d77.5996565!2d12.978813!1m5!1m1!1s0x3bae1cfe75446265:0x296c70e9a129418e!2m2!1d77.7068926!2d13.198909?entry=ttu" target="_blank" rel="noopener noreferrer" class="glass-card route-card" aria-label="Get directions from Kempegowda Airport, estimated 60 minutes">
+                        <div class="route-icon"><i class="fa-solid fa-plane" aria-hidden="true"></i></div><div class="route-info"><h2>Airport Route</h2><p>Kempegowda International Airport</p><span class="eta">~ 60 mins</span></div><i class="fa-solid fa-chevron-right arrow" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://www.google.com/maps/dir/M.+Chinnaswamy+Stadium,+Mahatma+Gandhi+Rd,+near+Cubbon+Road,+Shivaji+Nagar,+Bengaluru,+Karnataka+560001/Railway+Station+Road,+Kempegowda,+Majestic,+Bengaluru,+Karnataka+560023/@12.9743268,77.5750251,3395m/data=!3m2!1e3!4b1!4m13!4m12!1m5!1m1!1s0x3bae1664d3619b53:0xc13769784709aec!2m2!1d77.5996565!2d12.978813!1m5!1m1!1s0x3bae161b289fcd15:0x131c5c9004e14250!2m2!1d77.5698186!2d12.9781204?entry=ttu" target="_blank" rel="noopener noreferrer" class="glass-card route-card" aria-label="Get directions from Railway Station, estimated 25 minutes">
+                        <div class="route-icon"><i class="fa-solid fa-train" aria-hidden="true"></i></div><div class="route-info"><h2>Railway Station</h2><p>KSR Bengaluru City Junction</p><span class="eta">~ 25 mins</span></div><i class="fa-solid fa-chevron-right arrow" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://www.google.com/maps/dir/M.+Chinnaswamy+Stadium,+Mahatma+Gandhi+Rd,+near+Cubbon+Road,+Shivaji+Nagar,+Bengaluru,+Karnataka+560001/Bus+Stand,+216,+Meenakshi+Kovil+St,+Near,+Shivaji+Nagar,+Bengaluru,+Karnataka+560051/@12.9795842,77.5952022,1697m/data=!3m2!1e3!4b1!4m13!4m12!1m5!1m1!1s0x3bae1664d3619b53:0xc13769784709aec!2m2!1d77.5996565!2d12.978813!1m5!1m1!1s0x3bae1663e3536bd1:0x26ade9349fe90a89!2m2!1d77.6027796!2d12.9842131?entry=ttu" target="_blank" rel="noopener noreferrer" class="glass-card route-card" aria-label="Get directions from nearest bus stop, estimated 10 minutes walk">
+                        <div class="route-icon"><i class="fa-solid fa-bus" aria-hidden="true"></i></div><div class="route-info"><h2>Nearest Bus Stop</h2><p>Shivaji Nagar Bus Terminus</p><span class="eta">~ 10 mins (Walk)</span></div><i class="fa-solid fa-chevron-right arrow" aria-hidden="true"></i>
+                    </a>
+                </nav>
+                <div class="glass-card promo-card"><i class="fa-brands fa-uber" aria-hidden="true"></i><div class="promo-text"><h2>Book a Ride</h2><p>Get 20% off your ride to the stadium.</p></div></div>
+            </section>
+
+            <!-- === PROFILE === -->
+            <section id="profile" class="view" role="tabpanel" aria-labelledby="nav-profile">
+                <div class="view-header"><h1>Fan Profile</h1></div>
+                <div class="glass-card profile-header" id="profile-container">
+                    <div class="avatar" id="profile-avatar" role="img" aria-label="User avatar">JD</div>
+                    <div class="profile-info">
+                        <h2 id="profile-name">John Doe</h2>
+                        <p id="profile-points">Super Fan • 2,450 Points</p>
+                        <button id="btn-google-login" class="btn primary-btn" style="margin-top: 10px; padding: 8px; width: auto; font-size: 0.85rem;">
+                            <i class="fa-brands fa-google" aria-hidden="true"></i> Sign in with Google
+                        </button>
+                    </div>
+                    <button class="icon-btn" id="btn-settings" aria-label="Profile settings"><i class="fa-solid fa-gear" aria-hidden="true"></i></button>
+                </div>
+                <div class="stats-grid">
+                    <div class="glass-card stat"><i class="fa-solid fa-ticket" aria-hidden="true"></i><h3>12</h3><p>Matches Attended</p></div>
+                    <div class="glass-card stat"><i class="fa-solid fa-store" aria-hidden="true"></i><h3>₹4,500</h3><p>Merch Spend</p></div>
+                </div>
+                <div class="glass-card history-card"><h2>Recent Matches</h2><ul class="history-list" id="history-list" aria-label="Match attendance history"><li><div class="match">RCB vs MI</div><div class="date">May 10, 2024</div></li><li><div class="match">RCB vs KKR</div><div class="date">May 02, 2024</div></li><li><div class="match">RCB vs SRH</div><div class="date">April 15, 2024</div></li></ul></div>
+            </section>
+
+            <!-- === EMERGENCY === -->
+            <section id="emergency" class="view" role="tabpanel" aria-labelledby="nav-sos">
+                <div class="view-header"><h1>Emergency Assistance</h1></div>
+                <div class="glass-card emergency-alert" role="alert">
+                    <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i><h2>Need Immediate Help?</h2><p>Pressing the SOS button will alert stadium security to your exact seat location.</p>
+                    <button class="btn danger-btn pulse-danger" id="sos-btn" aria-label="Send SOS emergency alert to stadium security">SOS Alert</button>
+                </div>
+                <div class="emergency-contacts" aria-label="Emergency contact numbers">
+                    <a href="tel:100" class="glass-card route-card emergency-contact" aria-label="Call Police at 100"><div class="route-icon danger"><i class="fa-solid fa-phone" aria-hidden="true"></i></div><div class="route-info"><h2>Police Control Room</h2><p>Dial 100</p></div></a>
+                    <a href="tel:108" class="glass-card route-card emergency-contact" aria-label="Call Ambulance at 108"><div class="route-icon danger"><i class="fa-solid fa-truck-medical" aria-hidden="true"></i></div><div class="route-info"><h2>Medical Emergency</h2><p>Stadium Medical Team &amp; Ambulance — Dial 108</p></div></a>
+                    <a href="tel:112" class="glass-card route-card emergency-contact" aria-label="Call Emergency Services at 112"><div class="route-icon danger"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div><div class="route-info"><h2>Stadium Security</h2><p>Security Control &amp; Evacuation — Dial 112</p></div></a>
+                    <div class="glass-card route-card emergency-contact"><div class="route-icon warning"><i class="fa-solid fa-child" aria-hidden="true"></i></div><div class="route-info"><h2>Lost &amp; Found / Missing Child</h2><p>Gate 3 Information Desk</p></div></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Gemini AI Assistant -->
+        <div id="ai-assistant" class="ai-assistant-container" aria-live="polite">
+            <button id="ai-toggle-btn" class="btn btn-primary ai-toggle">
+                <span class="icon">✨</span> Ask Gemini
+            </button>
+            <div id="ai-chat-window" class="ai-chat-window hidden">
+                <div class="ai-header">
+                    <h3>Stadium Assistant</h3>
+                    <button id="ai-close-btn" class="icon-btn" aria-label="Close Assistant">×</button>
+                </div>
+                <div id="ai-messages" class="ai-messages">
+                    <div class="msg ai-msg">Hi! I'm your Smart Stadium Assistant powered by Gemini. Ask me about weather, crowd density, or stadium facilities!</div>
+                </div>
+                <div class="ai-input-area">
+                    <input type="text" id="ai-input" placeholder="e.g., What's the weather like?" aria-label="Ask Gemini">
+                    <button id="ai-send-btn" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav" role="tablist" aria-label="Main navigation">
+            <button class="nav-item active" data-target="live-match" id="nav-live" role="tab" aria-selected="true" aria-controls="live-match"><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span>Live</span></button>
+            <button class="nav-item" data-target="stadium-map" id="nav-map" role="tab" aria-selected="false" aria-controls="stadium-map"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i><span>Map</span></button>
+            <button class="nav-item" data-target="tickets" id="nav-tickets" role="tab" aria-selected="false" aria-controls="tickets"><i class="fa-solid fa-ticket-simple" aria-hidden="true"></i><span>Tickets</span></button>
+            <button class="nav-item" data-target="routes" id="nav-transit" role="tab" aria-selected="false" aria-controls="routes"><i class="fa-solid fa-train-subway" aria-hidden="true"></i><span>Transit</span></button>
+            <button class="nav-item" data-target="profile" id="nav-profile" role="tab" aria-selected="false" aria-controls="profile"><i class="fa-regular fa-user" aria-hidden="true"></i><span>Profile</span></button>
+            <button class="nav-item danger-text" data-target="emergency" id="nav-sos" role="tab" aria-selected="false" aria-controls="emergency"><i class="fa-solid fa-shield-heart" aria-hidden="true"></i><span>SOS</span></button>
+        </nav>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-performance-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-remote-config-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js?v=2.3"></script>
+
+    <!-- Google Generative AI (Gemini) -->
+    <script type="importmap">
+        {
+            "imports": {
+                "@google/generative-ai": "https://esm.run/@google/generative-ai"
+            }
+        }
+    </script>
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+        window.GoogleGenerativeAI = GoogleGenerativeAI;
+    </script>
+
+    <!-- Google Maps API (Async/Defer) -> Development mode -->
+    <script src="https://maps.googleapis.com/maps/api/js?v=weekly&libraries=places,geometry&callback=initGoogleMaps" async defer></script>
+
+    <script src="app.js?v=2.3"></script>
+</body>
+</html>

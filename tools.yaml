@@ -1,0 +1,7 @@
+tools:
+  - name: sample-tool
+    description: Example tool
+    type: sql
+    connection:
+      type: sqlite
+      database: ./test.db
