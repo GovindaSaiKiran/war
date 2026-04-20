@@ -9,16 +9,18 @@
 /** @constant {Object} FIREBASE_CONFIG */
 const FIREBASE_CONFIG = {
   apiKey: 'AIzaSyDummyKeyForSmartStadium_v2',
-  authDomain: 'perceptive-bay-493811-c1.firebaseapp.com',
-  projectId: 'perceptive-bay-493811-c1',
-  storageBucket: 'perceptive-bay-493811-c1.appspot.com',
+  authDomain: 'prompt-wars-493904.firebaseapp.com',
+  projectId: 'prompt-wars-493904',
+  storageBucket: 'prompt-wars-493904.appspot.com',
   messagingSenderId: '879775404804',
   appId: '1:879775404804:web:smartstadium',
   measurementId: 'G-SMARTSTADIUM'
 };
 
 /**
- * Google Cloud Logging Integration
+ * Google Cloud Logging Integration.
+ * Problem Statement: Enables observability into app health and user events,
+ * ensuring stadium operators can monitor system reliability in real time.
  * @class CloudLogger
  */
 class CloudLogger {
@@ -89,7 +91,9 @@ class CloudProfiler {
 }
 
 /**
- * Firebase service wrapper with error handling and graceful degradation
+ * Firebase service wrapper with error handling and graceful degradation.
+ * Problem Statement: Provides the data backbone — auth for fan profiles,
+ * Firestore for crowd/emergency data, and analytics for engagement tracking.
  * @class FirebaseService
  */
 class FirebaseService {
@@ -254,5 +258,5 @@ class FirebaseService {
 const firebaseService = new FirebaseService();
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { FirebaseService, FIREBASE_CONFIG, firebaseService };
+  module.exports = { FirebaseService, FIREBASE_CONFIG, firebaseService, CloudLogger };
 }

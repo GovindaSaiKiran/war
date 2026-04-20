@@ -41,13 +41,17 @@
         <!-- Header -->
         <header class="app-header" role="banner">
             <div class="logo">
-                <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                <i class="fa-brands fa-google-cloud" aria-hidden="true" style="font-size: 1.8rem; color: var(--accent-blue);"></i>
                 <div class="logo-text">
-                    <span>Smart Stadium</span>
-                    <small>Powered by Google Cloud</small>
+                    <span style="letter-spacing: -0.5px;">Smart Stadium</span>
+                    <small style="color: var(--accent-blue); font-weight: 600;">Google Cloud Console</small>
                 </div>
             </div>
             <div class="header-actions">
+                <div class="cloud-status-chip">
+                    <span class="status-dot"></span>
+                    <span>Region: asia-south1</span>
+                </div>
                 <button class="icon-btn" id="btn-notifications" aria-label="View notifications">
                     <i class="fa-regular fa-bell" aria-hidden="true"></i><span class="badge pulse" aria-label="New notifications"></span>
                 </button>
@@ -152,6 +156,36 @@
                     <div class="glass-card stat"><i class="fa-solid fa-ticket" aria-hidden="true"></i><h3>12</h3><p>Matches Attended</p></div>
                     <div class="glass-card stat"><i class="fa-solid fa-store" aria-hidden="true"></i><h3>₹4,500</h3><p>Merch Spend</p></div>
                 </div>
+                <!-- Cloud Resource Summary -->
+                <div class="glass-card infrastructure-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h2 style="margin: 0; font-size: 0.95rem; color: var(--text-secondary);">Infrastructure Status</h2>
+                        <span class="live-indicator" style="padding: 2px 8px; font-size: 0.65rem;"><i class="fa-solid fa-circle"></i> HEALTHY</span>
+                    </div>
+                    <div class="infra-grid">
+                        <div class="infra-item">
+                            <span class="infra-label">Compute Engine</span>
+                            <div class="infra-value-row">
+                                <div class="infra-bar"><div class="infra-fill" style="width: 32%; background: var(--accent-blue);"></div></div>
+                                <span class="infra-pct">32%</span>
+                            </div>
+                        </div>
+                        <div class="infra-item">
+                            <span class="infra-label">Cloud Storage</span>
+                            <div class="infra-value-row">
+                                <div class="infra-bar"><div class="infra-fill" style="width: 68%; background: var(--accent-green);"></div></div>
+                                <span class="infra-pct">68%</span>
+                            </div>
+                        </div>
+                        <div class="infra-item">
+                            <span class="infra-label">Generative AI APIs</span>
+                            <div class="infra-value-row">
+                                <div class="infra-bar"><div class="infra-fill" style="width: 15%; background: var(--accent-yellow);"></div></div>
+                                <span class="infra-pct">15%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="glass-card history-card"><h2>Recent Matches</h2><ul class="history-list" id="history-list" aria-label="Match attendance history"><li><div class="match">RCB vs MI</div><div class="date">May 10, 2024</div></li><li><div class="match">RCB vs KKR</div><div class="date">May 02, 2024</div></li><li><div class="match">RCB vs SRH</div><div class="date">April 15, 2024</div></li></ul></div>
             </section>
 
@@ -173,7 +207,7 @@
 
         <!-- Gemini AI Assistant -->
         <div id="ai-assistant" class="ai-assistant-container" aria-live="polite">
-            <button id="ai-toggle-btn" class="btn btn-primary ai-toggle">
+            <button id="ai-toggle-btn" class="btn btn-primary ai-toggle" aria-label="Open Gemini AI assistant">
                 <span class="icon">✨</span> Ask Gemini
             </button>
             <div id="ai-chat-window" class="ai-chat-window hidden">
@@ -186,7 +220,7 @@
                 </div>
                 <div class="ai-input-area">
                     <input type="text" id="ai-input" placeholder="e.g., What's the weather like?" aria-label="Ask Gemini">
-                    <button id="ai-send-btn" class="btn btn-primary">Send</button>
+                    <button id="ai-send-btn" class="btn btn-primary" aria-label="Send message to assistant">Send</button>
                 </div>
             </div>
         </div>

@@ -6,23 +6,22 @@
 
 /* --- Design Tokens --- */
 :root {
-    --bg-dark: #0a0e17;
-    --bg-card: rgba(255,255,255,0.05);
-    --bg-card-hover: rgba(255,255,255,0.1);
-    --border-glass: rgba(255,255,255,0.1);
-    --text-primary: #f0f0f0;
+    --bg-dark: #0f172a;
+    --bg-card: rgba(30, 41, 59, 0.7);
+    --bg-card-hover: rgba(51, 65, 85, 0.8);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
-    --accent-blue: #3b82f6;
-    --accent-blue-hover: #2563eb;
-    --accent-red: #ef4444;
-    --accent-green: #10b981;
-    --accent-yellow: #f59e0b;
-    --nav-bg: rgba(10,14,23,0.92);
+    --accent-blue: #4285F4; /* Google Blue */
+    --accent-red: #EA4335;  /* Google Red */
+    --accent-green: #34A853;/* Google Green */
+    --accent-yellow: #FBBC05;/* Google Yellow */
+    --nav-bg: rgba(15, 23, 42, 0.95);
     --rcb: #d32f2f;
     --csk: #fbc02d;
-    --radius-sm: 10px;
-    --radius-md: 16px;
-    --radius-lg: 22px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
     --font: 'Outfit', system-ui, sans-serif;
     --transition: 0.25s ease;
     --shadow: 0 8px 32px rgba(0,0,0,0.35);
@@ -79,7 +78,30 @@ main::-webkit-scrollbar-thumb{background:var(--border-glass);border-radius:10px}
 @keyframes blink{50%{opacity:0}}
 
 /* --- Glass Card --- */
-.glass-card{background:var(--bg-card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border-glass);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow);transition:transform var(--transition),background var(--transition)}
+.glass-card{background:var(--bg-card);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border-glass);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow);transition:transform var(--transition),background var(--transition);border-top: 1px solid rgba(255,255,255,0.15);}
+.glass-card:hover {background: var(--bg-card-hover); border-color: rgba(255,255,255,0.2);}
+
+/* --- Cloud Status Chip --- */
+.cloud-status-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(66, 133, 244, 0.1);
+    border: 1px solid rgba(66, 133, 244, 0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    color: var(--accent-blue);
+    font-weight: 600;
+    margin-right: 12px;
+}
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent-green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent-green);
+}
 
 /* --- Match Card --- */
 .match-teams{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
@@ -127,6 +149,49 @@ main::-webkit-scrollbar-thumb{background:var(--border-glass);border-radius:10px}
 .queue-item .q-time{font-size:1.15rem;font-weight:700}
 .queue-item .q-time.busy{color:var(--accent-red)}
 .queue-item .q-time.ok{color:var(--accent-green)}
+
+/* --- Infrastructure Dashboard --- */
+.infrastructure-card {
+    padding: 20px;
+    margin-top: 10px;
+}
+.infra-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.infra-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.infra-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+.infra-value-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.infra-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.infra-fill {
+    height: 100%;
+    border-radius: 2px;
+}
+.infra-pct {
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 25px;
+    text-align: right;
+}
 
 /* --- Stadium Map --- */
 .map-container{position:relative;padding:0;overflow:hidden;height:300px;display:flex;align-items:center;justify-content:center}

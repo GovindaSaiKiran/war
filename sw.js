@@ -5,6 +5,8 @@
  * @version 2.0.0
  */
 
+// Problem Statement: Offline support ensures stadium attendees with poor connectivity
+// can still access match data, tickets, and emergency contacts reliably.
 const CACHE_NAME = 'smart-stadium-v2';
 const PRECACHE_URLS = [
   '/',
