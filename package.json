@@ -8,7 +8,9 @@
     "test:watch": "jest --watch",
     "lint": "eslint . --ext .js",
     "start": "npx serve -s . -l 8080",
-    "dev": "npx serve -s . -l 8080"
+    "dev": "npx serve -s . -l 8080",
+    "predeploy": "npm test",
+    "deploy": "npx gh-pages -d ."
   },
   "devDependencies": {
     "jest": "^29.7.0",
